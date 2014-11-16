@@ -1,26 +1,47 @@
 // Dave, Aditya
 
-
+Cell[][] grid;
+int rows, cols; 
 
 
 void setup()
 {
   
+  size(160, 160); 
   ReadFile test = new ReadFile("test.nrrd");
   test.populateMeta();
   test.populateValues();
   test.printLines();
+  
+  rows = test.sizeX; 
+  cols = test.sizeY; 
+  grid = new Cell[cols][rows];
+  for (int i = 0; i < rows; i++) 
+  {
+    for (int j = 0; j < cols; j++)
+    {
+      // Initialize each object
+      float colorValue = test.cells[i][j];
+      grid[i][j] = new Cell(i*20,j*20, 20, 20, colorValue );
+    }
+  }
   
 }
 
 
 void draw()
 {
-
+  for (int i = 0; i < cols; i++)
+  {
+    for (int j = 0; j < rows; j++)
+    {
+      grid[i][j].display();
+    }
+  }
 }
 
 
-
+//---------------------------------------------------------------------------------------------------------
 
 class ReadFile{
 
@@ -144,3 +165,33 @@ class ReadFile{
   
 
 }
+
+
+//------------------------------------------------------------------------------------
+
+
+// A Cell object
+class Cell {
+  // A cell object knows about its location in the grid as well as its size with the variables x,y,w,h.
+  float x,y;   // x,y location
+  float w,h;   // width and height
+  float fillColor; 
+
+  // Cell Constructor
+  Cell(float tempX, float tempY, float tempW, float tempH, float fillColor) 
+  {
+    x = tempX;
+    y = tempY;
+    w = tempW;
+    h = tempH;
+    this.fillColor = fillColor; 
+  } 
+  
+
+  void display() {
+    stroke(255);
+    fill(this.fillColor%255);
+    rect(x,y,w,h); 
+  }
+}
+
